@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Madrissa Attendance Register</title>
+
+
+<!-- PWA -->
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#0b6e4f">
+
+
+<!-- Icons -->
+
+<link rel="icon" href="icons/192.png">
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>
+مدرسہ حاضری رجسٹر
+</h1>
+
+<p>
+Madrissa Attendance Register
+</p>
+
+<span id="watermark">
+M Ijaz GHS 124 NB
+</span>
+
+</header>
+
+
+
+<section class="info">
+
+
+<h2>
+مدرسہ معلومات
+</h2>
+
+
+<label>
+مدرسہ کا نام
+</label>
+
+<input 
+type="text"
+id="madrissaName"
+placeholder="Enter Madrissa Name">
+
+
+
+<label>
+انچارج نام
+</label>
+
+<input 
+type="text"
+id="inchargeName"
+placeholder="Enter Incharge Name">
+
+
+
+<label>
+تاریخ
+</label>
+
+<input 
+type="date"
+id="date">
+
+
+
+</section>
+
+
+
+
+
+<section class="toolbar">
+
+
+<button id="addStudent">
+➕ طالب علم شامل کریں
+</button>
+
+
+
+<button id="downloadBtn">
+⬇ Download
+</button>
+
+
+
+<button id="shareBtn">
+📤 Share
+</button>
+
+
+
+<button onclick="printReport()">
+🖨 Print
+</button>
+
+
+
+<button onclick="backupData()">
+💾 Backup
+</button>
+
+
+
+<label class="restore">
+
+📂 Restore
+
+<input 
+type="file"
+onchange="restoreData(event)"
+hidden>
+
+</label>
+
+
+
+</section>
+
+
+
+
+
+
+<section class="search">
+
+
+<input
+type="text"
+id="searchBox"
+placeholder="طالب علم تلاش کریں">
+
+
+<button onclick="searchStudent()">
+Search
+</button>
+
+
+</section>
+
+
+
+
+
+
+
+<section class="summary">
+
+
+<h2>
+Attendance Summary
+</h2>
+
+
+<p>
+Total Students:
+<span id="totalStudents">
+0
+</span>
+</p>
+
+
+<p>
+Present:
+<span id="totalPresent">
+0
+</span>
+</p>
+
+
+<p>
+Absent:
+<span id="totalAbsent">
+0
+</span>
+</p>
+
+
+<p>
+Leave:
+<span id="totalLeave">
+0
+</span>
+</p>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+<div class="table-container">
+
+
+<table id="attendanceTable">
+
+
+<thead>
+
+
+<tr>
+
+
+<th>
+نمبر
+</th>
+
+
+<th>
+طالب علم نام
+</th>
+
+
+<th>
+فجر
+</th>
+
+
+<th>
+ظہر
+</th>
+
+
+<th>
+عصر
+</th>
+
+
+<th>
+مغرب
+</th>
+
+
+<th>
+عشاء
+</th>
+
+
+<th>
+Edit
+</th>
+
+
+<th>
+Delete
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+<!-- JavaScript Data -->
+
+
+</tbody>
+
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<section class="monthly">
+
+
+<h2>
+Monthly Attendance Report
+</h2>
+
+
+<div id="monthlyReport">
+
+Data will appear automatically
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+<footer>
+
+
+<p>
+Offline Madrissa Attendance PWA
+</p>
+
+
+<p>
+Designed for Education Management
+</p>
+
+
+<p>
+© M Ijaz GHS 124 NB
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+<!-- JavaScript -->
+
+<script src="script.js"></script>
+
+
+
+<!-- Service Worker -->
+
+<script>
+
+
+if("serviceWorker" in navigator){
+
+
+window.addEventListener(
+"load",
+()=>{
+
+
+navigator.serviceWorker.register(
+"sw.js"
+)
+.then(()=>{
+
+console.log(
+"Offline Mode Enabled"
+);
+
+});
+
+
+});
+
+
+}
+
+
+</script>
+
+
+
+</body>
+
+
+</html>
