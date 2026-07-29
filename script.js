@@ -1171,3 +1171,500 @@ updateDashboard;
 
 window.monthlyReport =
 monthlyReport;
+/* ==========================================
+   MADRISSA ATTENDANCE REGISTER PWA
+   SCRIPT.JS FINAL VERSION - PART 4
+   Export + Backup + Restore + PWA
+========================================== */
+
+
+
+// =============================
+// Create Attendance Report Text
+// =============================
+
+function createReport(){
+
+
+let info =
+JSON.parse(
+localStorage.getItem(INFO_KEY)
+) || {};
+
+
+
+let report = `
+
+مدرسہ حاضری رپورٹ
+
+مدرسہ:
+${info.name || ""}
+
+انچارج:
+${info.incharge || ""}
+
+تاریخ:
+${info.date || ""}
+
+
+=====================
+
+
+`;
+
+
+
+students.forEach((student,index)=>{
+
+
+report += `
+
+${index+1}. ${student.name}
+
+فجر:
+${student.prayers.fajr}
+
+ظہر:
+${student.prayers.zuhr}
+
+عصر:
+${student.prayers.asr}
+
+مغرب:
+${student.prayers.maghrib}
+
+عشاء:
+${student.prayers.isha}
+
+
+Present:
+${student.present}
+
+Absent:
+${student.absent}
+
+Leave:
+${student.leave}
+
+
+=====================
+
+`;
+
+
+});
+
+
+return report;
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Download Report
+// =============================
+
+function downloadReport(){
+
+
+let file =
+new Blob(
+
+[
+createReport()
+],
+
+{
+type:"text/plain;charset=utf-8"
+}
+
+);
+
+
+
+let url =
+URL.createObjectURL(file);
+
+
+
+let link =
+document.createElement("a");
+
+
+link.href=url;
+
+
+link.download =
+"Madrissa_Attendance_Report.txt";
+
+
+link.click();
+
+
+
+URL.revokeObjectURL(url);
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// Share Report
+// =============================
+
+function shareReport(){
+
+
+let text =
+createReport();
+
+
+
+if(
+navigator.share
+){
+
+
+navigator.share({
+
+title:
+"Madrissa Attendance Report",
+
+text:text
+
+
+});
+
+
+}
+
+else{
+
+
+alert(
+"Share option not supported"
+);
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Print Report
+// =============================
+
+function printReport(){
+
+
+let win =
+window.open("");
+
+
+
+win.document.write(`
+
+<h2>
+Madrissa Attendance Report
+</h2>
+
+
+<pre>
+
+${createReport()}
+
+</pre>
+
+`);
+
+
+
+win.print();
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Backup Data
+// =============================
+
+function backupData(){
+
+
+
+let backup = {
+
+
+students:students,
+
+
+info:
+JSON.parse(
+localStorage.getItem(INFO_KEY)
+)
+
+
+
+};
+
+
+
+let blob =
+new Blob(
+
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+
+{
+type:"application/json"
+}
+
+);
+
+
+
+let url =
+URL.createObjectURL(blob);
+
+
+
+let link =
+document.createElement("a");
+
+
+link.href=url;
+
+
+link.download =
+"Madrissa_Backup.json";
+
+
+link.click();
+
+
+
+URL.revokeObjectURL(url);
+
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Restore Backup
+// =============================
+
+function restoreData(event){
+
+
+
+let file =
+event.target.files[0];
+
+
+
+if(!file)
+return;
+
+
+
+let reader =
+new FileReader();
+
+
+
+reader.onload=function(e){
+
+
+let data =
+JSON.parse(
+e.target.result
+);
+
+
+
+students =
+data.students || [];
+
+
+
+saveStudents();
+
+
+
+if(data.info){
+
+
+localStorage.setItem(
+
+INFO_KEY,
+
+JSON.stringify(
+data.info
+)
+
+);
+
+
+}
+
+
+
+loadInfo();
+
+
+renderStudents();
+
+
+refreshDashboard();
+
+
+
+alert(
+"Backup Restore Successfully"
+);
+
+
+
+};
+
+
+
+reader.readAsText(file);
+
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Button Events
+// =============================
+
+
+document
+.getElementById("downloadBtn")
+?.addEventListener(
+"click",
+downloadReport
+);
+
+
+
+document
+.getElementById("shareBtn")
+?.addEventListener(
+"click",
+shareReport
+);
+
+
+
+
+
+
+
+// =============================
+// Service Worker
+// =============================
+
+
+if(
+"serviceWorker" in navigator
+){
+
+
+window.addEventListener(
+"load",
+()=>{
+
+
+navigator.serviceWorker
+.register(
+"sw.js"
+)
+.then(()=>{
+
+console.log(
+"PWA Offline Ready"
+);
+
+});
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+// Global Functions
+
+window.downloadReport =
+downloadReport;
+
+
+window.shareReport =
+shareReport;
+
+
+window.printReport =
+printReport;
+
+
+window.backupData =
+backupData;
+
+
+window.restoreData =
+restoreData;
