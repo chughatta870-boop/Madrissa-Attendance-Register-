@@ -452,3 +452,383 @@ editStudent;
 
 window.deleteStudent =
 deleteStudent;
+/* ==========================================
+   MADRISSA ATTENDANCE REGISTER PWA
+   SCRIPT.JS FINAL VERSION - PART 2
+   Five Prayers Attendance System
+========================================== */
+
+
+// =============================
+// Attendance Status Function
+// =============================
+
+function markAttendance(
+    studentId,
+    prayer,
+    status
+){
+
+let student =
+students.find(
+s=>s.id===studentId
+);
+
+
+
+if(!student)
+return;
+
+
+
+// Save Prayer Status
+
+student.prayers[prayer] = status;
+
+
+
+// Calculate Total
+
+calculateAttendance(student);
+
+
+
+// Save Database
+
+saveStudents();
+
+
+// Refresh Table
+
+renderStudents();
+
+
+}
+
+
+
+
+
+
+// =============================
+// Calculate Student Attendance
+// =============================
+
+function calculateAttendance(student){
+
+
+let present = 0;
+
+let absent = 0;
+
+let leave = 0;
+
+
+
+Object.values(student.prayers)
+.forEach(value=>{
+
+
+if(value==="Present"){
+
+present++;
+
+}
+
+
+else if(value==="Absent"){
+
+absent++;
+
+}
+
+
+else if(value==="Leave"){
+
+leave++;
+
+}
+
+
+});
+
+
+
+student.present = present;
+
+student.absent = absent;
+
+student.leave = leave;
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Prayer Attendance Buttons
+// =============================
+
+function attendanceButtons(
+studentId,
+prayer
+){
+
+
+
+return `
+
+
+<div class="attendance-btn">
+
+
+<button 
+class="present"
+onclick="markAttendance(
+${studentId},
+'${prayer}',
+'Present'
+)">
+
+P
+
+</button>
+
+
+
+<button
+class="absent"
+onclick="markAttendance(
+${studentId},
+'${prayer}',
+'Absent'
+)">
+
+A
+
+</button>
+
+
+
+
+<button
+class="leave"
+onclick="markAttendance(
+${studentId},
+'${prayer}',
+'Leave'
+)">
+
+L
+
+</button>
+
+
+</div>
+
+
+`;
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Replace Table Render
+// =============================
+
+function renderStudents(){
+
+
+if(!tableBody)
+return;
+
+
+
+tableBody.innerHTML="";
+
+
+
+students.forEach(
+(student,index)=>{
+
+
+let row =
+document.createElement("tr");
+
+
+
+row.innerHTML=`
+
+<td>
+
+${student.roll}
+
+</td>
+
+
+
+<td>
+
+${student.name}
+
+</td>
+
+
+
+
+
+<td>
+
+${attendanceButtons(
+student.id,
+"fajr"
+)}
+
+<br>
+
+${student.prayers.fajr}
+
+</td>
+
+
+
+
+
+<td>
+
+${attendanceButtons(
+student.id,
+"zuhr"
+)}
+
+<br>
+
+${student.prayers.zuhr}
+
+</td>
+
+
+
+
+
+<td>
+
+${attendanceButtons(
+student.id,
+"asr"
+)}
+
+<br>
+
+${student.prayers.asr}
+
+</td>
+
+
+
+
+
+<td>
+
+${attendanceButtons(
+student.id,
+"maghrib"
+)}
+
+<br>
+
+${student.prayers.maghrib}
+
+</td>
+
+
+
+
+
+<td>
+
+${attendanceButtons(
+student.id,
+"isha"
+)}
+
+<br>
+
+${student.prayers.isha}
+
+</td>
+
+
+
+
+
+
+<td>
+
+<button
+class="editBtn"
+onclick="editStudent(${student.id})">
+
+Edit
+
+</button>
+
+
+</td>
+
+
+
+
+
+
+<td>
+
+<button
+class="deleteBtn"
+onclick="deleteStudent(${student.id})">
+
+Delete
+
+</button>
+
+
+</td>
+
+
+`;
+
+
+
+tableBody.appendChild(row);
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+// Global Access
+
+window.markAttendance =
+markAttendance;
+
+
+window.attendanceButtons =
+attendanceButtons;
