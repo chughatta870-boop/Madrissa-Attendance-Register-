@@ -1,21 +1,25 @@
 {
+  "id": "/",
   "name": "Madrissa Attendance Register",
-  "short_name": "Madrissa Attendance",
+  "short_name": "Attendance",
+  "description": "Offline Five Prayers Madrissa Attendance Register",
 
-  "description": "Offline Five Prayers Attendance Register App for Madrissa",
-
-  "lang": "ur-PK",
-  "dir": "rtl",
-
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
 
   "display": "standalone",
-
-  "orientation": "portrait",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
 
   "background_color": "#eef2f7",
   "theme_color": "#0b6e4f",
+
+  "orientation": "portrait",
+
+  "lang": "ur-PK",
+  "dir": "rtl",
 
   "categories": [
     "education",
@@ -41,7 +45,10 @@
     {
       "name": "Attendance Register",
       "short_name": "Attendance",
+      "description": "Open Attendance Register",
       "url": "./index.html"
     }
-  ]
+  ],
+
+  "prefer_related_applications": false
 }
