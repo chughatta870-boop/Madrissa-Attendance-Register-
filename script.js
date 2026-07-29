@@ -832,3 +832,342 @@ markAttendance;
 
 window.attendanceButtons =
 attendanceButtons;
+/* ==========================================
+   MADRISSA ATTENDANCE REGISTER PWA
+   SCRIPT.JS FINAL VERSION - PART 3
+   Dashboard + Monthly Report + Search
+========================================== */
+
+
+
+// =============================
+// Calculate All Attendance
+// =============================
+
+function calculateMonthlyAttendance(){
+
+
+let totalPresent = 0;
+
+let totalAbsent = 0;
+
+let totalLeave = 0;
+
+
+
+students.forEach(student=>{
+
+
+totalPresent += student.present;
+
+
+totalAbsent += student.absent;
+
+
+totalLeave += student.leave;
+
+
+});
+
+
+
+return {
+
+present: totalPresent,
+
+absent: totalAbsent,
+
+leave: totalLeave
+
+};
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// Update Dashboard
+// =============================
+
+function updateDashboard(){
+
+
+let data =
+calculateMonthlyAttendance();
+
+
+
+let totalStudents =
+document.getElementById(
+"totalStudents"
+);
+
+
+
+let totalPresent =
+document.getElementById(
+"totalPresent"
+);
+
+
+
+let totalAbsent =
+document.getElementById(
+"totalAbsent"
+);
+
+
+
+let totalLeave =
+document.getElementById(
+"totalLeave"
+);
+
+
+
+
+if(totalStudents){
+
+totalStudents.innerText =
+students.length;
+
+}
+
+
+
+if(totalPresent){
+
+totalPresent.innerText =
+data.present;
+
+}
+
+
+
+if(totalAbsent){
+
+totalAbsent.innerText =
+data.absent;
+
+}
+
+
+
+if(totalLeave){
+
+totalLeave.innerText =
+data.leave;
+
+}
+
+
+
+}
+
+
+
+
+
+// =============================
+// Monthly Report
+// =============================
+
+function monthlyReport(){
+
+
+let box =
+document.getElementById(
+"monthlyReport"
+);
+
+
+
+if(!box)
+return;
+
+
+
+let data =
+calculateMonthlyAttendance();
+
+
+
+box.innerHTML = `
+
+
+<h3>
+Monthly Attendance Summary
+</h3>
+
+
+<p>
+Total Students:
+${students.length}
+</p>
+
+
+<p>
+Present:
+${data.present}
+</p>
+
+
+<p>
+Absent:
+${data.absent}
+</p>
+
+
+<p>
+Leave:
+${data.leave}
+</p>
+
+
+`;
+
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Search Student
+// =============================
+
+const searchBox =
+document.getElementById(
+"searchBox"
+);
+
+
+
+if(searchBox){
+
+
+searchBox.addEventListener(
+"input",
+function(){
+
+
+let value =
+this.value
+.toLowerCase();
+
+
+
+let rows =
+document.querySelectorAll(
+"#attendanceTable tbody tr"
+);
+
+
+
+rows.forEach(row=>{
+
+
+let name =
+row.children[1]
+.innerText
+.toLowerCase();
+
+
+
+if(
+name.includes(value)
+){
+
+
+row.style.display="";
+
+
+}
+
+else{
+
+
+row.style.display="none";
+
+
+}
+
+
+
+});
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// Update Everything After Change
+// =============================
+
+
+function refreshDashboard(){
+
+
+updateDashboard();
+
+monthlyReport();
+
+
+}
+
+
+
+
+// Auto Refresh
+
+setInterval(
+
+refreshDashboard,
+
+1000
+
+);
+
+
+
+
+
+
+// Initial Load
+
+refreshDashboard();
+
+
+
+
+// Global
+
+window.calculateMonthlyAttendance =
+calculateMonthlyAttendance;
+
+
+window.updateDashboard =
+updateDashboard;
+
+
+window.monthlyReport =
+monthlyReport;
